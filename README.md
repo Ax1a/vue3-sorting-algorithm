@@ -1,5 +1,6 @@
 # Vue JS Sorting Algorithm Visualizer
-<br/>
-## This repo include sorting algorithms namely:
-- Bubble Sort
-- ...
+
+> [!NOTE]
+> This repository contains sorting algorithms namely:
+> - Bubble Sort
+> - ...
