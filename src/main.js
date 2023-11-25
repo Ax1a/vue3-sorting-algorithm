@@ -1,17 +1,9 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
 import './style.css'
+import { Icon } from '@iconify/vue'
 import App from './App.vue'
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'Home',
-      component: () => import('@/views/Home.vue')
-    }
-  ]
-})
+const app = createApp(App)
 
-createApp(App).use(router).mount('#app')
+app.component('Icon', Icon)
+app.mount('#app')
