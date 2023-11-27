@@ -95,8 +95,8 @@
     delay.value = data.target.value
   }
 
-  onMounted(async () => {
-    const _algorithms = await getAlgorithms()
+  onMounted( () => {
+    const _algorithms = getAlgorithms()
     Object.assign(algorithms, _algorithms)
     window.addEventListener('resize', handleResize)
     generateRandomNumber()

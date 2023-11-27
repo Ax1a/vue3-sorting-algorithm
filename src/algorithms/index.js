@@ -11,6 +11,6 @@ const importAlgorithms = async () => {
 }
 
 export const getAlgorithms = async () => {
-  importAlgorithms()
+  await importAlgorithms()
   return algorithmFunctions
 }
