@@ -12,7 +12,7 @@ export async function bubbleSort(n, arr, getDelay) {
         swapped = true
         await sortDelay(getDelay())
       }
-      await sortDelay(10)
+      await sortDelay(5)
       arr[j].current = false
       arr[j + 1].current = false
     }

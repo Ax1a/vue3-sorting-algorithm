@@ -28,7 +28,7 @@
         </div>
         <div class="w-full">
           <label for="speed" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed</label>
-          <input id="speed" type="range" min="10" max="1000" value="300" @change="props.speedMethod" class="range range-xs range-primary" />
+          <input dir="rtl" id="speed" type="range" min="5" max="1000" value="300" @input="props.speedMethod" class="range range-xs range-primary" />
         </div>
       </div>
       <div class="flex align-middle justify-center mt-4">
