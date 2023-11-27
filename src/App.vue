@@ -66,7 +66,7 @@
     if (sorted.value) return
 
     sorted.value = true
-    const algorithmFunction = await algorithm
+    const algorithmFunction = algorithm
     let n = nums.value.length
 
     algorithmFunction(n, nums.value, () => delay.value)
@@ -95,8 +95,8 @@
     delay.value = data.target.value
   }
 
-  onMounted( () => {
-    const _algorithms = getAlgorithms()
+  onMounted(async () => {
+    const _algorithms = await getAlgorithms()
     Object.assign(algorithms, _algorithms)
     window.addEventListener('resize', handleResize)
     generateRandomNumber()
