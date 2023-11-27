@@ -10,6 +10,7 @@ const importAlgorithms = async () => {
   }
 }
 
-await importAlgorithms()
-
-export { algorithmFunctions }
+export const getAlgorithms = async () => {
+  await importAlgorithms()
+  return algorithmFunctions
+}

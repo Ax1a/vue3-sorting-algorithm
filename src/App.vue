@@ -11,7 +11,7 @@
             'w-36 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
             sorted
               ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600'
-              : 'bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white'
+              : 'border border-gray-700 bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white'
           ]"
         >
           {{
@@ -49,24 +49,24 @@
   </div>
 </template>
 <script setup>
-  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-  import { algorithmFunctions } from './algorithms'
+  import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+  import { getAlgorithms } from './algorithms'
   import Options from './components/Options.vue'
   import Toast from './components/Toast.vue'
 
   const nums = ref([])
-  const windowWidth = ref(window.innerWidth)
   const items = ref(30)
   const delay = ref(300)
   const sorted = ref(false)
+  const algorithms = reactive({})
+  const windowWidth = ref(window.innerWidth)
   const showSortAlgos = ref(window.innerWidth > 500)
-  const algorithms = algorithmFunctions
 
-  const executeAlgorithms = (algorithm) => {
+  const executeAlgorithms = async (algorithm) => {
     if (sorted.value) return
 
     sorted.value = true
-    const algorithmFunction = algorithm
+    const algorithmFunction = await algorithm
     let n = nums.value.length
 
     algorithmFunction(n, nums.value, () => delay.value)
@@ -95,7 +95,9 @@
     delay.value = data.target.value
   }
 
-  onMounted(() => {
+  onMounted(async () => {
+    const _algorithms = await getAlgorithms()
+    Object.assign(algorithms, _algorithms)
     window.addEventListener('resize', handleResize)
     generateRandomNumber()
   })
