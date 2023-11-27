@@ -1,5 +1,5 @@
 import { sortDelay } from '@/utils'
 
-export async function quickSort(n, arr, getDelay) {
+export default async function quickSort(n, arr, getDelay) {
   
 }

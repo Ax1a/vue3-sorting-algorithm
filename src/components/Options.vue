@@ -1,8 +1,9 @@
 <template lang="">
   <transition>
     <div
-      v-if="showOptions"
-      class="bg-slate-700 p-6 rounded-lg flex flex-col flex-wrap mx-5 gap-4 mt-10 drop-shadow-md absolute bottom-10"
+      id="options"
+      v-show="showOptions"
+      class="bg-slate-700 p-6 rounded-lg flex flex-col flex-wrap mx-5 gap-4 mt-10 drop-shadow-md absolute bottom-24"
     >
       <button
         type="button"
@@ -28,39 +29,48 @@
         </div>
         <div class="w-full">
           <label for="speed" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed</label>
-          <input dir="rtl" id="speed" type="range" min="5" max="1000" value="300" @input="props.speedMethod" class="range range-xs range-primary" />
+          <input
+            dir="rtl"
+            id="speed"
+            type="range"
+            min="5"
+            max="1000"
+            value="300"
+            @input="props.speedMethod"
+            class="range range-xs range-primary"
+          />
         </div>
       </div>
-      <div class="flex align-middle justify-center mt-4">
-        <button
-          @click="showOptions = false"
-          class="bg-slate-600 h-8 w-20 rounded-lg hover:bg-slate-500 transition-all duration-150"
-        >
-          <Icon icon="ep:arrow-down" class="mx-auto" width="25" height="25" />
-        </button>
-      </div>
-    </div>
-    <div v-else class="absolute bottom-10">
-      <button
-        class="bg-slate-600/75 h-8 w-20 rounded-lg hover:bg-slate-500 transition-all duration-150 drop-shadow-md"
-        @click="showOptions = true"
-      >
-        <Icon icon="ep:arrow-up" class="mx-auto" width="25" height="25" />
-      </button>
     </div>
   </transition>
+  <div class="absolute bottom-10">
+    <button
+      id="options"
+      class="bg-slate-600/75 h-8 w-20 rounded-lg hover:bg-slate-500 transition-all duration-150 drop-shadow-md"
+      @click="showOptions = !showOptions"
+    >
+      <Icon
+        icon="ep:arrow-down"
+        :class="['mx-auto transition-all ease-in-out duration-300', showOptions ? 'rotate-0' : 'rotate-180']"
+        width="25"
+        height="25"
+      />
+    </button>
+  </div>
 </template>
 <script setup>
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const props = defineProps(['method', 'speedMethod', 'itemsMethod'])
   const showOptions = ref(window.innerWidth > 500)
-  
+
   onMounted(() => {
+    if (window.innerWidth < 500) window.addEventListener('click', closeOptions)
     window.addEventListener('resize', handleResize)
   })
 
   onBeforeUnmount(() => {
+    if (window.innerWidth < 500) window.removeEventListener('click', closeOptions)
     window.removeEventListener('resize', handleResize)
   })
 
@@ -68,6 +78,11 @@
     showOptions.value = window.innerWidth > 500
   }
 
+  const closeOptions = (event) => {
+    if (!event.target.closest('#options') && showOptions.value) {
+      showOptions.value = false
+    }
+  }
 </script>
 <style scoped>
   .v-enter-active {

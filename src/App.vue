@@ -3,19 +3,23 @@
     <div
       class="lg:w-auto w-full bg-slate-700 p-6 lg:rounded-lg flex flex-row overflow-x-auto mx-5 gap-4 md:mt-10 drop-shadow-md"
     >
-      <template v-for="algorithm in algorithms" :key="algorithm">
+      <template v-for="(algoFunction, label) in algorithms" :key="label">
         <button
           type="button"
-          :disabled="algorithm.disabled || sorted"
-          @click="sortNumbers(algorithm.label.toLowerCase())"
+          @click="executeAlgorithms(algoFunction)"
           :class="[
-            'w-36 focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
-            algorithm.disabled || sorted
-              ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-800'
-              : 'bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 text-white'
+            'w-36 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
+            sorted
+              ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600'
+              : 'bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white'
           ]"
         >
-          {{ algorithm.label }} Sort
+          {{
+            label
+              ?.split('_')
+              ?.map((l) => l.charAt(0).toUpperCase() + l.slice(1))
+              ?.join(' ')
+          }}
         </button>
       </template>
     </div>
@@ -46,8 +50,7 @@
 </template>
 <script setup>
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-  import { bubbleSort } from './algorithms/bubble_sort'
-  import { selectionSort } from './algorithms/selection_sort'
+  import { algorithmFunctions } from './algorithms'
   import Options from './components/Options.vue'
   import Toast from './components/Toast.vue'
 
@@ -57,32 +60,17 @@
   const delay = ref(300)
   const sorted = ref(false)
   const showSortAlgos = ref(window.innerWidth > 500)
-  const algorithms = [
-    {
-      label: 'Bubble',
-      disabled: false
-    },
-    {
-      label: 'Selection',
-      disabled: false
-    },
-    {
-      label: 'Merge',
-      disabled: true
-    },
-    {
-      label: 'Quick',
-      disabled: true
-    },
-    {
-      label: 'Insertion',
-      disabled: true
-    },
-    {
-      label: 'Heap',
-      disabled: true
-    }
-  ]
+  const algorithms = algorithmFunctions
+
+  const executeAlgorithms = (algorithm) => {
+    if (sorted.value) return
+
+    sorted.value = true
+    const algorithmFunction = algorithm
+    let n = nums.value.length
+
+    algorithmFunction(n, nums.value, () => delay.value)
+  }
 
   const generateRandomNumber = () => {
     sorted.value = false
@@ -105,24 +93,6 @@
 
   const changeSpeedOfSorting = (data) => {
     delay.value = data.target.value
-  }
-
-  const sortNumbers = async (type) => {
-    if (sorted.value) return
-    let n = nums.value.length
-
-    switch (type) {
-      case 'bubble':
-        bubbleSort(n, nums.value, () => delay.value)
-        break
-      case 'selection':
-        selectionSort(n, nums.value, () => delay.value)
-        break
-
-      default:
-        break
-    }
-    sorted.value = true
   }
 
   onMounted(() => {

@@ -1,6 +1,6 @@
 import { sortDelay, setIgnoredItemsState } from '@/utils'
 
-export async function bubbleSort(n, arr, getDelay) {
+export default async function bubbleSort(n, arr, getDelay) {
   let swapped
   for (let i = 0; i < n - 1; i++) {
     swapped = false
@@ -10,9 +10,8 @@ export async function bubbleSort(n, arr, getDelay) {
       if (arr[j].value > arr[j + 1].value) {
         ;[arr[j].value, arr[j + 1].value] = [arr[j + 1].value, arr[j].value]
         swapped = true
-        await sortDelay(getDelay())
       }
-      await sortDelay(5)
+      await sortDelay(getDelay())
       arr[j].current = false
       arr[j + 1].current = false
     }

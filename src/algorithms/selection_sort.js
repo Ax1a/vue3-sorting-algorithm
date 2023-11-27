@@ -1,6 +1,6 @@
 import { sortDelay, setIgnoredItemsState } from '@/utils'
 
-export async function selectionSort(n, arr, getDelay) {
+export default async function selectionSort(n, arr, getDelay) {
   let min
   for (let i = 0; i < n - 1; i++) {
     min = i

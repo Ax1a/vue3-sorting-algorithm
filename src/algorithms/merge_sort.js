@@ -1,5 +1,5 @@
 import { sortDelay } from '@/utils'
 
-export async function mergeSort(n, arr, getDelay) {
+export default async function mergeSort(n, arr, getDelay) {
   
 }
