@@ -1,4 +1,4 @@
-import { sortDelay } from '@/utils'
+import { sortDelay, setIgnoredItemsState } from '@/utils'
 
 export async function bubbleSort(n, arr, getDelay) {
   let swapped
@@ -21,8 +21,5 @@ export async function bubbleSort(n, arr, getDelay) {
   }
 
   // To make sure all bar colors are green
-  const ignoredItemsState = arr.filter(data => !data.sorted)
-  ignoredItemsState.forEach(item => {
-    item.sorted = true
-  })
+  setIgnoredItemsState(arr)
 }

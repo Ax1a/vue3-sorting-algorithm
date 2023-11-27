@@ -6,11 +6,11 @@
       <template v-for="algorithm in algorithms" :key="algorithm">
         <button
           type="button"
-          :disabled="algorithm.disabled"
+          :disabled="algorithm.disabled || sorted"
           @click="sortNumbers(algorithm.label.toLowerCase())"
           :class="[
             'w-36 focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
-            algorithm.disabled
+            algorithm.disabled || sorted
               ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-800'
               : 'bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 text-white'
           ]"
@@ -29,6 +29,9 @@
             num.current
               ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
               : 'from-gray-200 via-3ray-600 to-gray-300',
+            num.picked
+              ? 'from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-500/75'
+              : 'from-gray-200 via-3ray-600 to-gray-300',
             num.sorted
               ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
               : 'from-gray-200 via-3ray-600 to-gray-300'
@@ -42,8 +45,9 @@
   </div>
 </template>
 <script setup>
-  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
   import { bubbleSort } from './algorithms/bubble_sort'
+  import { selectionSort } from './algorithms/selection_sort'
   import Options from './components/Options.vue'
   import Toast from './components/Toast.vue'
 
@@ -60,7 +64,7 @@
     },
     {
       label: 'Selection',
-      disabled: true
+      disabled: false
     },
     {
       label: 'Merge',
@@ -88,14 +92,11 @@
       nums.value.push({
         value: rand,
         current: false,
-        sorted: false
+        sorted: false,
+        picked: false
       })
     }
   }
-
-  watch(sorted, (sorted) => {
-    algorithms[0].disabled = sorted ?? false
-  })
 
   const changeNumberOfItems = (data) => {
     items.value = data.target.value
@@ -110,8 +111,16 @@
     if (sorted.value) return
     let n = nums.value.length
 
-    if (type === 'bubble') {
-      bubbleSort(n, nums.value, () => delay.value)
+    switch (type) {
+      case 'bubble':
+        bubbleSort(n, nums.value, () => delay.value)
+        break
+      case 'selection':
+        selectionSort(n, nums.value, () => delay.value)
+        break
+
+      default:
+        break
     }
     sorted.value = true
   }
