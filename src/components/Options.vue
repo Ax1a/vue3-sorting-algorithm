@@ -43,7 +43,7 @@
       </div>
     </div>
   </transition>
-  <div class="absolute bottom-10">
+  <div :class="['absolute bottom-10 transition-all duration-100 ease-in-out', showOptions || windowWidth > 500 ? '' : 'up-down-animation']">
     <button
       id="options"
       class="bg-slate-600/75 h-8 w-20 rounded-lg hover:bg-slate-500 transition-all duration-150 drop-shadow-md"
@@ -63,6 +63,7 @@
 
   const props = defineProps(['method', 'speedMethod', 'itemsMethod'])
   const showOptions = ref(window.innerWidth > 500)
+  const windowWidth = window.innerWidth
 
   onMounted(() => {
     if (window.innerWidth < 500) window.addEventListener('click', closeOptions)
@@ -97,5 +98,19 @@
   .v-leave-to {
     transform: translateY(20px);
     opacity: 0;
+  }
+
+  .up-down-animation {
+    animation: MoveUpDown 2s infinite;
+  }
+
+  @keyframes MoveUpDown {
+    0%,
+    100% {
+      bottom: 2.5rem;
+    }
+    50% {
+      bottom: 1.5rem;
+    }
   }
 </style>

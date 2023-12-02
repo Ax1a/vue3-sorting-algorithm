@@ -6,7 +6,7 @@
       <template v-for="(algoFunction, label) in algorithms" :key="label">
         <button
           type="button"
-          @click="executeAlgorithms(algoFunction)"
+          @click="executeAlgorithms(algoFunction, label)"
           :class="[
             'w-36 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
             sorted
@@ -29,7 +29,7 @@
           v-for="(num, index) in nums"
           :key="index"
           :class="[
-            'md:mx-1 mx-[3px] transition-all duration-150 bg-gradient-to-r',
+            'md:mx-1 mx-[3px] transition-all duration-100 ease-in-out bg-gradient-to-r',
             num.current
               ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
               : 'from-gray-200 via-3ray-600 to-gray-300',
@@ -62,14 +62,22 @@
   const windowWidth = ref(window.innerWidth)
   const showSortAlgos = ref(window.innerWidth > 500)
 
-  const executeAlgorithms = async (algorithm) => {
+  const executeAlgorithms = async (algorithm, label) => {
     if (sorted.value) return
 
     sorted.value = true
     const algorithmFunction = algorithm
     let n = nums.value.length
 
-    algorithmFunction(n, nums.value, () => delay.value)
+    switch (label) {
+      case 'quick_sort':
+        algorithmFunction(nums.value, 0, n - 1, () => delay.value)
+        break
+
+      default:
+        algorithmFunction(n, nums.value, () => delay.value)
+        break
+    }
   }
 
   const generateRandomNumber = () => {
