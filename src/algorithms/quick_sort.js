@@ -6,12 +6,13 @@ async function partition(arr, low, high, getDelay) {
 
   for (let j = low; j <= high - 1; j++) {
     arr[j].current = true
+    await sortDelay(getDelay())
     if (arr[j].value < pivot) {
       i++
       if (i >= 0) arr[i].current = true
+      await sortDelay(getDelay())
       ;[arr[i].value, arr[j].value] = [arr[j].value, arr[i].value]
     }
-    await sortDelay(getDelay())
     if (i >= 0) arr[i].current = false
     arr[j].current = false
   }

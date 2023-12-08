@@ -68,12 +68,13 @@
     sorted.value = true
     const algorithmFunction = algorithm
     let n = nums.value.length
-
     switch (label) {
       case 'quick_sort':
         algorithmFunction(nums.value, 0, n - 1, () => delay.value)
         break
-
+      case 'merge_sort':
+        algorithmFunction(nums.value, 0, n - 1, () => delay.value)
+        break
       default:
         algorithmFunction(n, nums.value, () => delay.value)
         break
