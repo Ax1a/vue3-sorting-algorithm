@@ -9,7 +9,7 @@
           @click="executeAlgorithms(algoFunction, label)"
           :class="[
             'w-36 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
-            sorted
+            stateStore.isSorted
               ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600'
               : 'border border-gray-700 bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white'
           ]"
@@ -32,13 +32,15 @@
             'md:mx-1 mx-[3px] transition-all duration-100 ease-in-out bg-gradient-to-r',
             num.current
               ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
-              : 'from-gray-200 via-3ray-600 to-gray-300',
-            num.picked
+              : num.current2
+              ? 'from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 shadow-2xl shadow-fuchsia-500/75'
+              : num.picked
               ? 'from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-500/75'
-              : 'from-gray-200 via-3ray-600 to-gray-300',
-            num.sorted
+              : num.picked2
+              ? 'from-orange-400 via-orange-500 to-orange-600 shadow-2xl shadow-orange-500/75'
+              : num.sorted
               ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
-              : 'from-gray-200 via-3ray-600 to-gray-300'
+              : 'from-gray-200 to-gray-300'
           ]"
           :style="[`height: ${num.value + 10}px; width: ${barWidth}`]"
         ></div>
@@ -53,44 +55,44 @@
   import { getAlgorithms } from './algorithms'
   import Options from './components/Options.vue'
   import Toast from './components/Toast.vue'
+  import { useStateStore } from './utils/stores'
 
+  const stateStore = useStateStore()
   const nums = ref([])
   const items = ref(30)
-  const delay = ref(300)
-  const sorted = ref(false)
   const algorithms = reactive({})
   const windowWidth = ref(window.innerWidth)
   const showSortAlgos = ref(window.innerWidth > 500)
 
   const executeAlgorithms = async (algorithm, label) => {
-    if (sorted.value) return
+    if (stateStore.isSorted) return
 
-    sorted.value = true
+    stateStore.setSortState(true)
     const algorithmFunction = algorithm
     let n = nums.value.length
     switch (label) {
       case 'quick_sort':
-        algorithmFunction(nums.value, 0, n - 1, () => delay.value)
-        break
       case 'merge_sort':
-        algorithmFunction(nums.value, 0, n - 1, () => delay.value)
+        await algorithmFunction(nums.value, 0, n - 1)
         break
       default:
-        algorithmFunction(n, nums.value, () => delay.value)
+        await algorithmFunction(n, nums.value)
         break
     }
   }
 
   const generateRandomNumber = () => {
-    sorted.value = false
+    stateStore.setSortState(false)
     nums.value = []
     for (let i = 0; i < items.value; i++) {
       const rand = Math.floor(Math.random() * 200)
       nums.value.push({
         value: rand,
         current: false,
+        current2: false,
         sorted: false,
-        picked: false
+        picked: false,
+        picked2: false
       })
     }
   }
@@ -101,7 +103,7 @@
   }
 
   const changeSpeedOfSorting = (data) => {
-    delay.value = data.target.value
+    stateStore.setDelay(data.target.value)
   }
 
   onMounted(async () => {

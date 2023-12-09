@@ -1,6 +1,7 @@
-import { sortDelay, setIgnoredItemsState } from '@/utils'
+import { sortDelay, setIgnoredItemsState, isSorted } from '@/utils'
 
-async function merge(arr, l, m, r, getDelay) {
+async function merge(arr, l, m, r) {
+  if (!isSorted()) return
   var n1 = m - l + 1
   var n2 = r - m
 
@@ -8,9 +9,11 @@ async function merge(arr, l, m, r, getDelay) {
   var R = new Array(n2)
 
   for (var i = 0; i < n1; i++) {
+    if (!isSorted()) break
     L[i] = arr[l + i].value
   }
   for (var j = 0; j < n2; j++) {
+    if (!isSorted()) break
     R[j] = arr[m + 1 + j].value
   }
 
@@ -19,6 +22,7 @@ async function merge(arr, l, m, r, getDelay) {
   var k = l
 
   while (i < n1 && j < n2) {
+    if (!isSorted()) break
     if (L[i] <= R[j]) {
       arr[k].value = L[i]
       i++
@@ -30,30 +34,34 @@ async function merge(arr, l, m, r, getDelay) {
   }
 
   while (i < n1) {
+    if (!isSorted()) break
     arr[k].value = L[i]
-    await sortDelay(getDelay())
+    await sortDelay()
     i++
     k++
   }
 
   while (j < n2) {
+    if (!isSorted()) break
     arr[k].value = R[j]
-    await sortDelay(getDelay())
+    await sortDelay()
     j++
     k++
   }
 }
 
-async function mergeSortRecursion(arr, l, r, getDelay) {
-  if (l >= r) {
-    return
-  }
+async function mergeSortRecursion(arr, l, r) {
+  if (l >= r || !isSorted()) return
   var m = l + parseInt((r - l) / 2)
-  await mergeSortRecursion(arr, l, m, getDelay)
-  await mergeSortRecursion(arr, m + 1, r, getDelay)
-  await merge(arr, l, m, r, getDelay)
+  await mergeSortRecursion(arr, l, m)
+  await mergeSortRecursion(arr, m + 1, r)
+  await merge(arr, l, m, r)
+
+  if (!isSorted()) return
 }
 
-export default async function mergeSort(arr, l, r, getDelay) {
-  await mergeSortRecursion(arr, l, r, getDelay)
+export default async function mergeSort(arr, l, r) {
+  await mergeSortRecursion(arr, l, r)
+  if (!isSorted()) return
+  setIgnoredItemsState(arr)
 }
