@@ -1,7 +1,7 @@
 # Vue JS Sorting Algorithm Visualizer
 
 > [!NOTE]
-> This repository contains sorting algorithms namely:
+> This project uses sorting algorithms such as:
 > - Bubble Sort
 > - Selection Sort
 > - Merge Sort
