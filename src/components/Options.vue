@@ -21,7 +21,7 @@
             id="number_items"
             type="range"
             min="6"
-            max="50"
+            max="200"
             @change="props.itemsMethod"
             value="30"
             class="range range-xs range-primary"

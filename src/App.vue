@@ -27,7 +27,7 @@
       <div class="overflow-x-auto h-full overflow-y-hidden w-full whitespace-nowrap flex justify-center items-end">
         <div v-for="(num, index) in nums" :key="index" class="flex flex-col text-center">
           <div
-            v-if="windowWidth > 750 || (windowWidth <= 750 && nums.length < 25)"
+            v-if="(windowWidth > 750 && nums.length <= 50) || (windowWidth <= 750 && nums.length < 25)"
             :class="['italic font-medium text-gray-300']"
             :style="[`font-size: ${windowWidth > 1000 || (windowWidth < 1200 && nums.length < 10) ? 12 : 8}px`]"
           >
@@ -36,16 +36,16 @@
           <div
             :class="[
               'transition-all duration-75 ease-in-out bg-gradient-to-r',
-              num.current
+              num.sorted
+                ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
+                : num.current
                 ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
                 : num.current2
                 ? 'from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 shadow-2xl shadow-fuchsia-500/75'
                 : num.picked
                 ? 'from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-500/75'
                 : num.picked2
-                ? 'from-orange-400 via-orange-500 to-orange-600 shadow-2xl shadow-orange-500/75'
-                : num.sorted
-                ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
+                ? 'from-orange-200 to-orange-300 shadow-2xl shadow-orange-500/75'
                 : 'from-gray-100 to-gray-300'
             ]"
             :style="[`height: ${num.value + 10}px; width: ${barWidth}`]"
@@ -132,7 +132,7 @@
   const barWidth = computed(() => {
     const maxWidth = windowWidth.value / nums.value.length - 3
     const minWidth = 40
-    const width = Math.max(Math.min(maxWidth, minWidth), 1)
+    const width = Math.max(Math.min(maxWidth, minWidth), 1.5)
     return `${width}px`
   })
 </script>

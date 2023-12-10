@@ -17,6 +17,7 @@ async function merge(arr, l, m, r) {
     R[j] = arr[m + 1 + j].value
   }
 
+  
   var i = 0,
     j = 0
   var k = l
@@ -66,9 +67,14 @@ async function merge(arr, l, m, r) {
 
 async function mergeSortRecursion(arr, l, r) {
   if (l >= r || !isSorted()) return
-  var m = l + parseInt((r - l) / 2)
-  await mergeSortRecursion(arr, l, m)
-  await mergeSortRecursion(arr, m + 1, r)
+
+  const m = l + parseInt((r - l) / 2)
+
+  const pLeft = mergeSortRecursion(arr, l, m)
+  const pRight = mergeSortRecursion(arr, m + 1, r)
+
+  await Promise.all([pLeft, pRight])
+
   await merge(arr, l, m, r)
 
   if (!isSorted()) return

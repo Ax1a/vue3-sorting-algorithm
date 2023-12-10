@@ -28,8 +28,10 @@ async function quickSortRecursion(arr, low, high) {
     arr[high].picked = true
     let pi = await partition(arr, low, high)
     arr[high].picked = false
-    await quickSortRecursion(arr, low, pi - 1)
-    await quickSortRecursion(arr, pi + 1, high)
+    const pLeft = quickSortRecursion(arr, low, pi - 1)
+    const pRight = quickSortRecursion(arr, pi + 1, high)
+
+    await Promise.all([pLeft, pRight])
   }
 }
 
