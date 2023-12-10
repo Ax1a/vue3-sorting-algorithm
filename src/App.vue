@@ -26,7 +26,11 @@
     <div class="h-1/2 flex items-end justify-center w-full pb-0 md:pb-20">
       <div class="overflow-x-auto h-full overflow-y-hidden w-full whitespace-nowrap flex justify-center items-end">
         <div v-for="(num, index) in nums" :key="index" class="flex flex-col text-center">
-          <div :class="['text-xs italic font-medium text-gray-300']">
+          <div
+            v-if="windowWidth > 750 || (windowWidth <= 750 && nums.length < 25)"
+            :class="['italic font-medium text-gray-300']"
+            :style="[`font-size: ${windowWidth > 1000 || (windowWidth < 1200 && nums.length < 10) ? 12 : 8}px`]"
+          >
             {{ num.value }}
           </div>
           <div
