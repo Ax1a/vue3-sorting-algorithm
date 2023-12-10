@@ -12,8 +12,8 @@ async function partition(arr, low, high) {
     if (arr[j].value < pivot) {
       i++
       if (i >= 0) arr[i].current = true
-      await sortDelay()
       ;[arr[i].value, arr[j].value] = [arr[j].value, arr[i].value]
+      await sortDelay()
     }
     if (i >= 0) arr[i].current = false
     arr[j].current = false
