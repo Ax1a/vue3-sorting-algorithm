@@ -23,20 +23,31 @@ async function merge(arr, l, m, r) {
 
   while (i < n1 && j < n2) {
     if (!isSorted()) break
+
     if (L[i] <= R[j]) {
       arr[k].value = L[i]
+      arr[k].current = true
+      arr[k].current2 = false
       i++
     } else {
       arr[k].value = R[j]
+      arr[k].current = false
+      arr[k].current2 = true
       j++
     }
+    await sortDelay()
+    arr[k].current = false
+    arr[k].current2 = false
     k++
   }
 
   while (i < n1) {
     if (!isSorted()) break
     arr[k].value = L[i]
+    arr[k].current = true
+    arr[k].current2 = false
     await sortDelay()
+    arr[k].current = false
     i++
     k++
   }
@@ -44,7 +55,10 @@ async function merge(arr, l, m, r) {
   while (j < n2) {
     if (!isSorted()) break
     arr[k].value = R[j]
+    arr[k].current = false
+    arr[k].current2 = true
     await sortDelay()
+    arr[k].current2 = false
     j++
     k++
   }

@@ -9,7 +9,7 @@
       ]"
     >
       <div
-        class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-indigo-500 bg-indigo-100 rounded-lg dark:bg-indigo-800 dark:text-indigo-200"
+        class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 text-indigo-200"
       >
         <Icon icon="charm:github" width="20" height="20" />
       </div>

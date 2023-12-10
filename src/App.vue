@@ -10,8 +10,8 @@
           :class="[
             'w-36 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 transition-all duration-150 whitespace-nowrap',
             stateStore.isSorted
-              ? 'border border-gray-600 bg-gray-400 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600'
-              : 'border border-gray-700 bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white'
+              ? 'border border-gray-600 bg-gray-700 hover:bg-gray-600'
+              : 'border border-gray-700 bg-green-600 hover:bg-green-700 text-white'
           ]"
         >
           {{
@@ -23,27 +23,30 @@
         </button>
       </template>
     </div>
-    <div class="h-96 flex items-end justify-center w-full">
-      <div class="overflow-x-auto w-full whitespace-nowrap flex justify-center items-baseline">
-        <div
-          v-for="(num, index) in nums"
-          :key="index"
-          :class="[
-            'md:mx-1 mx-[3px] transition-all duration-100 ease-in-out bg-gradient-to-r',
-            num.current
-              ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
-              : num.current2
-              ? 'from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 shadow-2xl shadow-fuchsia-500/75'
-              : num.picked
-              ? 'from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-500/75'
-              : num.picked2
-              ? 'from-orange-400 via-orange-500 to-orange-600 shadow-2xl shadow-orange-500/75'
-              : num.sorted
-              ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
-              : 'from-gray-200 to-gray-300'
-          ]"
-          :style="[`height: ${num.value + 10}px; width: ${barWidth}`]"
-        ></div>
+    <div class="h-1/2 flex items-end justify-center w-full pb-0 md:pb-20">
+      <div class="overflow-x-auto h-full overflow-y-hidden w-full whitespace-nowrap flex justify-center items-end">
+        <div v-for="(num, index) in nums" :key="index" class="flex flex-col text-center">
+          <div :class="['text-xs italic font-medium text-gray-300']">
+            {{ num.value }}
+          </div>
+          <div
+            :class="[
+              'transition-all duration-75 ease-in-out bg-gradient-to-r',
+              num.current
+                ? 'from-indigo-400 via-indigo-500 to-indigo-600 shadow-2xl shadow-indigo-500/75'
+                : num.current2
+                ? 'from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 shadow-2xl shadow-fuchsia-500/75'
+                : num.picked
+                ? 'from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-500/75'
+                : num.picked2
+                ? 'from-orange-400 via-orange-500 to-orange-600 shadow-2xl shadow-orange-500/75'
+                : num.sorted
+                ? 'from-green-400 via-green-500 to-green-600 shadow-2xl shadow-green-500/75'
+                : 'from-gray-100 to-gray-300'
+            ]"
+            :style="[`height: ${num.value + 10}px; width: ${barWidth}`]"
+          ></div>
+        </div>
       </div>
     </div>
     <Options :method="generateRandomNumber" :speed-method="changeSpeedOfSorting" :items-method="changeNumberOfItems" />
@@ -123,7 +126,7 @@
   }
 
   const barWidth = computed(() => {
-    const maxWidth = windowWidth.value / nums.value.length - 15
+    const maxWidth = windowWidth.value / nums.value.length - 3
     const minWidth = 40
     const width = Math.max(Math.min(maxWidth, minWidth), 1)
     return `${width}px`

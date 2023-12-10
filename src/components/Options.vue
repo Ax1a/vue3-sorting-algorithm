@@ -8,13 +8,13 @@
       <button
         type="button"
         @click="props.method"
-        class="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 transition-all duration-150"
+        class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-900 transition-all duration-150"
       >
         Generate Items
       </button>
       <div class="flex flex-row gap-4 w-auto md:w-96 flex-wrap md:flex-nowrap">
         <div class="w-full">
-          <label for="number_items" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          <label for="number_items" class="block mb-2 text-sm font-medium text-white"
             >Number of items</label
           >
           <input
@@ -28,7 +28,7 @@
           />
         </div>
         <div class="w-full">
-          <label for="speed" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed</label>
+          <label for="speed" class="block mb-2 text-sm font-medium text-white">Speed</label>
           <input
             dir="rtl"
             id="speed"
