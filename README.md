@@ -10,4 +10,5 @@
 > - Heap Sort
 
 ### Preview
-![image](https://github.com/Ax1a/vue3-sorting-algorithm/assets/72881392/b3eb9171-5369-4f29-a7e7-ee3a2afbbc26)
+![img](https://github.com/Ax1a/vue3-sorting-algorithm/assets/72881392/edda4dae-882e-46d0-8e13-d6f5c588cd07)
+
