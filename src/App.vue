@@ -1,9 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 items-center h-screen">
+  <div class="flex flex-col items-center h-screen gap-4">
     <div
-      class="lg:w-auto w-full bg-slate-700 p-6 lg:rounded-lg flex flex-row overflow-x-auto mx-5 gap-4 md:mt-10 drop-shadow-md"
+      class="flex flex-row w-full gap-4 p-6 min-w-[100px] min-h-[90px] mx-5 overflow-x-auto lg:w-auto bg-slate-700 lg:rounded-lg md:mt-10 drop-shadow-md"
     >
-      <template v-for="(algoFunction, label) in algorithms" :key="label">
+      <div v-if="loading" class="w-[144px] h-[42px] rounded-lg skeleton opacity-50"></div>
+      <template v-else v-for="(algoFunction, label) in algorithms" :key="label">
         <button
           type="button"
           @click="executeAlgorithms(algoFunction, label)"
@@ -23,8 +24,8 @@
         </button>
       </template>
     </div>
-    <div class="h-1/2 flex items-end justify-center w-full pb-0 md:pb-20">
-      <div class="overflow-x-auto h-full overflow-y-hidden w-full whitespace-nowrap flex justify-center items-end">
+    <div class="flex items-end justify-center w-full pb-0 h-1/2 md:pb-20">
+      <div class="flex items-end justify-center w-full h-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
         <div v-for="(num, index) in nums" :key="index" class="flex flex-col text-center">
           <div
             v-if="(windowWidth > 750 && nums.length <= 50) || (windowWidth <= 750 && nums.length < 25)"
@@ -58,7 +59,7 @@
   </div>
 </template>
 <script setup>
-  import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, reactive, ref, nextTick } from 'vue'
   import { getAlgorithms } from './algorithms'
   import Options from './components/Options.vue'
   import Toast from './components/Toast.vue'
@@ -68,6 +69,7 @@
   const nums = ref([])
   const items = ref(30)
   const algorithms = reactive({})
+  const loading = ref(false)
   const windowWidth = ref(window.innerWidth)
   const showSortAlgos = ref(window.innerWidth > 500)
 
@@ -91,17 +93,15 @@
   const generateRandomNumber = () => {
     stateStore.setSortState(false)
     nums.value = []
-    for (let i = 0; i < items.value; i++) {
-      const rand = Math.floor(Math.random() * 200)
-      nums.value.push({
-        value: rand,
-        current: false,
-        current2: false,
-        sorted: false,
-        picked: false,
-        picked2: false
-      })
-    }
+
+    nums.value = Array.from({ length: items.value }, () => ({
+      value: Math.floor(Math.random() * 200),
+      current: false,
+      current2: false,
+      sorted: false,
+      picked: false,
+      picked2: false
+    }))
   }
 
   const changeNumberOfItems = (data) => {
@@ -114,10 +114,13 @@
   }
 
   onMounted(async () => {
+    loading.value = true
+    generateRandomNumber()
+
     const _algorithms = await getAlgorithms()
     Object.assign(algorithms, _algorithms)
     window.addEventListener('resize', handleResize)
-    generateRandomNumber()
+    loading.value = false
   })
 
   onBeforeUnmount(() => {
